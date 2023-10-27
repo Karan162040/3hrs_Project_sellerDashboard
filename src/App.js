@@ -1,23 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import ProductList from "./components/ProductList";
+import ProductForm from "./components/ProductForm";
 
 function App() {
+  const [productData, setProductData] = useState([]);
+  useEffect(() => {
+    let arr = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      arr.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+    }
+    setProductData(arr);
+  }, []);
+  const dataHandler = (data) => {
+    setProductData((prevState) => [data, ...prevState]);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ProductForm onSubmit={dataHandler} />
+      <ProductList Data={productData} setData={setProductData} />
     </div>
   );
 }
